@@ -28,5 +28,8 @@
     "dev": "wrangler --experimental-json-config dev",
     "predeploy": "wrangler --experimental-json-config d1 migrations apply d1-p1-dan --remote",
     "types": "wrangler --experimental-json-config types"
+  },
+  "dependencies": {
+    "itty-router": "^5.0.18"
   }
 }
