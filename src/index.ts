@@ -5,32 +5,58 @@ const router = Router();
 // -------------------- GUIDES --------------------
 
 router.get('/guides', async (request, env) => {
-  const { results } = await env.DB.prepare('SELECT * FROM guides').all(); // Reemplaza con tu tabla
-  return new Response(JSON.stringify(results), {
-    headers: { 'Content-Type': 'text/html' },
-  });
+  try {
+    const { results } = await env.DB.prepare('SELECT * FROM guides').all();
+    return new Response(JSON.stringify(results), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('Error fetching guides:', error);
+    return new Response('Internal Server Error', { status: 500 });
+  }
 });
 
 // -------------------- USERS --------------------
 
 router.get('/users', async (request, env) => {
-  const { results } = await env.DB.prepare('SELECT * FROM guides').all(); // Reemplaza con tu tabla
-  return new Response(JSON.stringify(results), {
-    headers: { 'Content-Type': 'text/html' },
-  });
+  try {
+    const { results } = await env.DB.prepare('SELECT * FROM users').all();
+    return new Response(JSON.stringify(results), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return new Response('Internal Server Error', { status: 500 });
+  }
 });
 
 router.get('/users/:id', async (request, env) => {
   const { id } = request.params;
-  const { results } = await env.DB.prepare('SELECT * FROM users WHERE id = ?').bind(id).first(); // Reemplaza con tu tabla
-  if (results) {
-    return new Response(JSON.stringify(results), {
-      headers: { 'Content-Type': 'text/html' },
-    });
-  } else {
-    return new Response('Not Found', { status: 404 });
+  try {
+    const { results } = await env.DB.prepare('SELECT * FROM users WHERE id = ?').bind(id).first();
+    if (results) {
+      return new Response(JSON.stringify(results), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    } else {
+      return new Response('Not Found', { status: 404 });
+    }
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    return new Response('Internal Server Error', { status: 500 });
   }
 });
+
+export default {
+  async fetch(request, env) {
+    try {
+      return await router.handle(request, env);
+    } catch (error) {
+      console.error('Error handling request:', error);
+      return new Response('Internal Server Error', { status: 500 });
+    }
+  },
+} satisfies ExportedHandler<Env>;
 
 // Ruta para crear un nuevo registro
 // router.post('/records', async (request, env) => {
@@ -66,9 +92,3 @@ router.get('/users/:id', async (request, env) => {
 //     return new Response('Not Found', { status: 404 });
 //   }
 // });
-
-export default {
-  async fetch(request, env) {
-    return router.handle(request, env);
-  },
-} satisfies ExportedHandler<Env>;
