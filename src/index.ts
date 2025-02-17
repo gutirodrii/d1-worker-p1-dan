@@ -68,5 +68,7 @@ router.get('/users/:id', async (request, env) => {
 // });
 
 export default {
-  fetch: router.handle,
-};
+  async fetch(request, env) {
+    return router.handle(request, env);
+  },
+} satisfies ExportedHandler<Env>;
