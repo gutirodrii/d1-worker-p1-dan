@@ -7,7 +7,7 @@ const router = Router();
 router.get('/guides', async (request, env) => {
   const { results } = await env.DB.prepare('SELECT * FROM guides').all(); // Reemplaza con tu tabla
   return new Response(JSON.stringify(results), {
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'text/html' },
   });
 });
 
@@ -16,7 +16,7 @@ router.get('/guides', async (request, env) => {
 router.get('/users', async (request, env) => {
   const { results } = await env.DB.prepare('SELECT * FROM guides').all(); // Reemplaza con tu tabla
   return new Response(JSON.stringify(results), {
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'text/html' },
   });
 });
 
@@ -25,7 +25,7 @@ router.get('/users/:id', async (request, env) => {
   const { results } = await env.DB.prepare('SELECT * FROM users WHERE id = ?').bind(id).first(); // Reemplaza con tu tabla
   if (results) {
     return new Response(JSON.stringify(results), {
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/html' },
     });
   } else {
     return new Response('Not Found', { status: 404 });
