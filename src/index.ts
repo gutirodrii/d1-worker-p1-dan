@@ -50,7 +50,7 @@ router.get('/users/:id', async (request, env) => {
 export default {
   async fetch(request, env) {
     try {
-      return await router.handle(request, env);
+      return router.fetch(request, env);
     } catch (error) {
       console.error('Error handling request:', error);
       return new Response('Internal Server Error', { status: 500 });
